@@ -4,7 +4,6 @@ import { FirebaseConfig } from "./src/config/FirebaseConfig";
 import firebase from "firebase";
 
 export default function App() {
-  console.log(FirebaseConfig);
   const firebaseConfig = FirebaseConfig;
   // Initialize Firebase
   !firebase.apps.length

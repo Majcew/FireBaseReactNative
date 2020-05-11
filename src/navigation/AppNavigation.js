@@ -3,8 +3,10 @@ import { createAppContainer, createSwitchNavigator } from "react-navigation";
 import { createStackNavigator } from "react-navigation-stack";
 import { createBottomTabNavigator } from "react-navigation-tabs";
 import { Ionicons } from "@expo/vector-icons";
+import { Alert } from "react-native";
 
 import HomeScreen from "../screens/HomeScreen";
+import Logout from "../screens/Logout";
 import LoadingScreen from "../screens/LoadingScreen";
 import LoginScreen from "../screens/LoginScreen";
 import RegisterScreen from "../screens/RegisterScreen";
@@ -27,6 +29,31 @@ const AppNavigator = createBottomTabNavigator(
           <Ionicons name="md-search" size={24} color={tintColor} />
         ),
       },
+    },
+    Logout: {
+      screen: Logout,
+      navigationOptions: ({ navigation, tintColor }) => ({
+        tabBarIcon: ({ tintColor }) => (
+          <Ionicons name="md-log-out" size={24} color={tintColor} />
+        ),
+        tabBarOnPress: () => {
+          return Alert.alert(
+            "Logout Attempt",
+            "Do you REALLY want to log out?",
+            [
+              {
+                text: "NO",
+              },
+              {
+                text: "YES",
+                onPress: () => {
+                  navigation.dispatch(NavigationActions.navigate("Login"));
+                },
+              },
+            ]
+          );
+        },
+      }),
     },
   },
   {

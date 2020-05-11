@@ -71,9 +71,12 @@ const RegisterScreen = ({ navigation }) => {
         <Text style={{ color: "#FFF", fontWeight: "500" }}>Sign up</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={{ alignSelf: "center", marginTop: 32 }}>
+      <TouchableOpacity
+        style={{ alignSelf: "center", marginTop: 32 }}
+        onPress={() => navigation.navigate("Login")}
+      >
         <Text style={{ color: "#414959", fontSize: 13 }}>
-          Already own an account?{" "}
+          Already own an Account?{" "}
           <Text style={{ fontWeight: "500", color: "#E9446A" }}>Login</Text>
         </Text>
       </TouchableOpacity>
