@@ -73,7 +73,7 @@ const RegisterScreen = ({ navigation }) => {
 
       <TouchableOpacity style={{ alignSelf: "center", marginTop: 32 }}>
         <Text style={{ color: "#414959", fontSize: 13 }}>
-          First time here?{" "}
+          Already own an account?{" "}
           <Text style={{ fontWeight: "500", color: "#E9446A" }}>Login</Text>
         </Text>
       </TouchableOpacity>
@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   greeting: {
-    marginTop: 32,
+    marginTop: 52,
     fontSize: 18,
     fontWeight: "400",
     textAlign: "center",

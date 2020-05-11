@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   greeting: {
-    marginTop: 32,
+    marginTop: 52,
     fontSize: 18,
     fontWeight: "400",
     textAlign: "center",
