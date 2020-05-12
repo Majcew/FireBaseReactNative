@@ -10,7 +10,12 @@ import Logout from "../screens/Logout";
 import LoadingScreen from "../screens/LoadingScreen";
 import LoginScreen from "../screens/LoginScreen";
 import RegisterScreen from "../screens/RegisterScreen";
-import SearchScreen from "../screens/SearchScreen";
+import firebase from "firebase";
+
+import AddSerial from "../screens/AddSerial";
+import AddBook from "../screens/AddBook";
+import AddMovie from "../screens/AddMovie";
+import AddMusic from "../screens/AddMusic";
 
 const AppNavigator = createBottomTabNavigator(
   {
@@ -22,17 +27,20 @@ const AppNavigator = createBottomTabNavigator(
         ),
       },
     },
-    Search: {
-      screen: SearchScreen,
-      navigationOptions: {
+    Add: {
+      screen: AddMovie,
+      navigationOptions: ({ navigation }) => ({
         tabBarIcon: ({ tintColor }) => (
-          <Ionicons name="md-search" size={24} color={tintColor} />
+          <Ionicons name="md-add" size={24} color={tintColor} />
         ),
-      },
+        tabBarOnPress: () => {
+          navigation.navigate("Adds");
+        },
+      }),
     },
     Logout: {
       screen: Logout,
-      navigationOptions: ({ navigation, tintColor }) => ({
+      navigationOptions: () => ({
         tabBarIcon: ({ tintColor }) => (
           <Ionicons name="md-log-out" size={24} color={tintColor} />
         ),
@@ -47,7 +55,7 @@ const AppNavigator = createBottomTabNavigator(
               {
                 text: "YES",
                 onPress: () => {
-                  navigation.dispatch(NavigationActions.navigate("Login"));
+                  firebase.auth().signOut();
                 },
               },
             ]
@@ -74,12 +82,59 @@ const AuthStack = createStackNavigator(
   }
 );
 
+const AddStack = createBottomTabNavigator({
+  Movie: {
+    screen: AddMovie,
+    navigationOptions: {
+      tabBarIcon: ({ tintColor }) => (
+        <Ionicons name="md-easel" size={24} color={tintColor} />
+      ),
+    },
+  },
+  Book: {
+    screen: AddBook,
+    navigationOptions: {
+      tabBarIcon: ({ tintColor }) => (
+        <Ionicons name="md-book" size={24} color={tintColor} />
+      ),
+    },
+  },
+  Music: {
+    screen: AddMusic,
+    navigationOptions: {
+      tabBarIcon: ({ tintColor }) => (
+        <Ionicons name="md-musical-note" size={24} color={tintColor} />
+      ),
+    },
+  },
+  Serial: {
+    screen: AddSerial,
+    navigationOptions: {
+      tabBarIcon: ({ tintColor }) => (
+        <Ionicons name="md-play" size={24} color={tintColor} />
+      ),
+    },
+  },
+  Back: {
+    screen: Logout,
+    navigationOptions: ({ navigation }) => ({
+      tabBarIcon: ({ tintColor }) => (
+        <Ionicons name="md-arrow-back" size={24} color={tintColor} />
+      ),
+      tabBarOnPress: () => {
+        navigation.navigate("App");
+      },
+    }),
+  },
+});
+
 export default createAppContainer(
   createSwitchNavigator(
     {
       Loading: LoadingScreen,
       App: AppNavigator,
       Auth: AuthStack,
+      Adds: AddStack,
     },
     {
       initialRouteName: "Loading",

@@ -19,9 +19,6 @@ const HomeScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Text>Welcome {fullName}</Text>
-      <TouchableOpacity style={{ marginTop: 32 }} onPress={signOutUser}>
-        <Text>Logout</Text>
-      </TouchableOpacity>
     </View>
   );
 };
