@@ -1,18 +1,29 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useLayoutEffect } from "react";
 import { StyleSheet, Text, View, TextInput, FlatList } from "react-native";
 import firebase from "firebase";
 
-const HomeScreen = ({ navigation }) => {
+const HomeScreen = () => {
   const [email, setEmail] = useState("");
   const [fullName, setFullName] = useState("");
   const [search, setSearch] = useState("");
-  const [data, setData] = useState({ data: "nothing", name: "something" });
+  const [uid, setUid] = useState("");
+  const [data, setData] = useState("");
 
   useEffect(() => {
-    const { email, displayName } = firebase.auth().currentUser;
+    const { email, displayName, uid } = firebase.auth().currentUser;
     setEmail(email);
     setFullName(displayName);
+    setUid(uid);
+    firebase
+      .database()
+      .ref("users/" + uid)
+      .once("value")
+      .then((response) => {
+        setData(response.val());
+      });
   }, []);
+
+  useLayoutEffect(() => {}, [data]);
 
   return (
     <View style={(styles.container, { marginTop: 52 })}>
@@ -26,12 +37,18 @@ const HomeScreen = ({ navigation }) => {
             onChangeText={(filter) => setSearch(filter)}
             value={search}
           ></TextInput>
-        </View>
-        <View>
           <FlatList
+            style={[{ marginTop: 32 }, { backgroundColor: "orange" }]}
             data={data}
-            keyExtractor={(item, index) => index.toString()}
-            renderItem={({ item }) => <Text>Kupa {index}</Text>}
+            keyExtractor={(index) => index.toString()}
+            renderItem={({ item }) => (
+              <View>
+                <Text>
+                  Author: {item.author} Tag: {item.tag}
+                </Text>
+                <Text>Title: {item.title}</Text>
+              </View>
+            )}
           />
         </View>
       </View>

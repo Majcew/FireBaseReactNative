@@ -1,14 +1,31 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, TextInput } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import firebase from "firebase";
 
 const AddSerial = () => {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [tag, setTag] = useState("Serial");
+  const [state, setState] = useState("n-seen");
+  const [uid, setUid] = useState("");
+
+  useEffect(() => {
+    setUid(firebase.auth().currentUser.uid);
+  });
 
   const addToFirebase = () => {
     //funkcja dodająca obiekt do firebase (tylko dla danego użytkownika)
+    firebase
+      .database()
+      .ref("users/" + uid)
+      .set({
+        title: title,
+        author: author,
+        tag: tag,
+        state: state,
+      })
+      .catch((error) => console.log(error));
   };
 
   return (
