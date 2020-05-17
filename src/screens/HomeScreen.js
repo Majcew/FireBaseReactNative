@@ -1,19 +1,28 @@
 import React, { useState, useEffect, useLayoutEffect } from "react";
 import { StyleSheet, Text, View, TextInput, FlatList } from "react-native";
 import firebase from "firebase";
+import { Checkmark } from "../components/Checkmark";
+import { Ionicons } from "@expo/vector-icons";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import FirebaseList from "../components/FirebaseList";
 
-const HomeScreen = () => {
+const HomeScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
+  const [fullList, setFullList] = useState([]);
   const [fullName, setFullName] = useState("");
   const [search, setSearch] = useState("");
   const [uid, setUid] = useState("");
-  const [data, setData] = useState("");
+  const [data, setData] = useState([]);
 
   useEffect(() => {
     const { email, displayName, uid } = firebase.auth().currentUser;
     setEmail(email);
     setFullName(displayName);
     setUid(uid);
+    fetchData(uid);
+  }, []);
+
+  const fetchData = (uid) => {
     firebase
       .database()
       .ref("users")
@@ -27,8 +36,61 @@ const HomeScreen = () => {
           });
         });
         setData(info);
+        setFullList(info);
       });
-  }, []);
+  };
+
+  const editItem = (item) => {
+    switch (item.info.tag) {
+      case "Serial":
+        console.log("Serial");
+        navigation.navigate("Serial", { data: item });
+        break;
+      case "Music":
+        console.log("Music");
+        navigation.navigate("Music", { data: item });
+        break;
+      case "Movie":
+        console.log("Movie");
+        navigation.navigate("Movie", { data: item });
+        break;
+      case "Book":
+        console.log("Book");
+        navigation.navigate("Book", { data: item });
+        break;
+      default:
+        break;
+    }
+  };
+
+  const deleteItem = (key) => {
+    firebase
+      .database()
+      .ref("users/" + uid)
+      .child(key)
+      .remove();
+  };
+
+  const fetchWithString = () => {
+    if (search === "") {
+      setData(fullList);
+    } else {
+      let temp = [];
+      fullList.forEach((item) => {
+        if (
+          item.info.title.toLowerCase().includes(search.toLowerCase()) ||
+          item.info.author.toLowerCase().includes(search.toLowerCase()) ||
+          item.info.tag.toLowerCase().includes(search.toLowerCase())
+        ) {
+          temp.push({
+            info: item.info,
+            key: item.key,
+          });
+        }
+      });
+      setData(temp);
+    }
+  };
 
   return (
     <View style={(styles.container, { marginTop: 52 })}>
@@ -40,21 +102,10 @@ const HomeScreen = () => {
             style={styles.input}
             autoCapitalize="none"
             onChangeText={(filter) => setSearch(filter)}
+            onSubmitEditing={fetchWithString}
             value={search}
           ></TextInput>
-          <FlatList
-            style={[{ marginTop: 32 }, { backgroundColor: "orange" }]}
-            data={data}
-            keyExtractor={(index) => index.toString()}
-            renderItem={({ item }) => (
-              <View>
-                <Text>
-                  Author: {item.info.author} Tag: {item.info.tag}
-                </Text>
-                <Text>Title: {item.info.title}</Text>
-              </View>
-            )}
-          />
+          <FirebaseList data={data} navigation={navigation} uid={uid} />
         </View>
       </View>
     </View>

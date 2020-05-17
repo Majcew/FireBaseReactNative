@@ -7,7 +7,7 @@ const AddBook = () => {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [tag, setTag] = useState("Book");
-  const [state, setState] = useState("n-read");
+  const [state, setState] = useState(false);
   const [uid, setUid] = useState("");
 
   useEffect(() => {
@@ -16,6 +16,16 @@ const AddBook = () => {
 
   const addToFirebase = () => {
     //funkcja dodająca obiekt do firebase (tylko dla danego użytkownika)
+    firebase
+      .database()
+      .ref("users/" + uid)
+      .push({
+        title: title,
+        author: author,
+        tag: tag,
+        state: state,
+      })
+      .catch((error) => console.log(error));
   };
 
   return (

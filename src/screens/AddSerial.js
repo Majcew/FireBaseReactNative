@@ -7,7 +7,7 @@ const AddSerial = () => {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [tag, setTag] = useState("Serial");
-  const [state, setState] = useState("n-seen");
+  const [state, setState] = useState(false);
   const [uid, setUid] = useState("");
 
   useEffect(() => {

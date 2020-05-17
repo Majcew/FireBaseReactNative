@@ -10,6 +10,7 @@ import Logout from "../screens/Logout";
 import LoadingScreen from "../screens/LoadingScreen";
 import LoginScreen from "../screens/LoginScreen";
 import RegisterScreen from "../screens/RegisterScreen";
+
 import firebase from "firebase";
 
 import AddSerial from "../screens/AddSerial";
