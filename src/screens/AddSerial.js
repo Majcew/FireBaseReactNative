@@ -19,7 +19,7 @@ const AddSerial = () => {
     firebase
       .database()
       .ref("users/" + uid)
-      .set({
+      .push({
         title: title,
         author: author,
         tag: tag,

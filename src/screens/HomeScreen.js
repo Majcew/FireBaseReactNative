@@ -16,14 +16,19 @@ const HomeScreen = () => {
     setUid(uid);
     firebase
       .database()
-      .ref("users/" + uid)
-      .once("value")
-      .then((response) => {
-        setData(response.val());
+      .ref("users")
+      .child(uid)
+      .on("value", (response) => {
+        const info = [];
+        response.forEach((item) => {
+          info.push({
+            info: item.val(),
+            key: item.key,
+          });
+        });
+        setData(info);
       });
   }, []);
-
-  useLayoutEffect(() => {}, [data]);
 
   return (
     <View style={(styles.container, { marginTop: 52 })}>
@@ -44,9 +49,9 @@ const HomeScreen = () => {
             renderItem={({ item }) => (
               <View>
                 <Text>
-                  Author: {item.author} Tag: {item.tag}
+                  Author: {item.info.author} Tag: {item.info.tag}
                 </Text>
-                <Text>Title: {item.title}</Text>
+                <Text>Title: {item.info.title}</Text>
               </View>
             )}
           />
