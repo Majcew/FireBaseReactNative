@@ -1,9 +1,6 @@
 import React, { useState, useEffect, useLayoutEffect } from "react";
 import { StyleSheet, Text, View, TextInput, FlatList } from "react-native";
 import firebase from "firebase";
-import { Checkmark } from "../components/Checkmark";
-import { Ionicons } from "@expo/vector-icons";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import FirebaseList from "../components/FirebaseList";
 
 const HomeScreen = ({ navigation }) => {
