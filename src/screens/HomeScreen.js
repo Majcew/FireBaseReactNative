@@ -40,37 +40,6 @@ const HomeScreen = ({ navigation }) => {
       });
   };
 
-  const editItem = (item) => {
-    switch (item.info.tag) {
-      case "Serial":
-        console.log("Serial");
-        navigation.navigate("Serial", { data: item });
-        break;
-      case "Music":
-        console.log("Music");
-        navigation.navigate("Music", { data: item });
-        break;
-      case "Movie":
-        console.log("Movie");
-        navigation.navigate("Movie", { data: item });
-        break;
-      case "Book":
-        console.log("Book");
-        navigation.navigate("Book", { data: item });
-        break;
-      default:
-        break;
-    }
-  };
-
-  const deleteItem = (key) => {
-    firebase
-      .database()
-      .ref("users/" + uid)
-      .child(key)
-      .remove();
-  };
-
   const fetchWithString = () => {
     if (search === "") {
       setData(fullList);
