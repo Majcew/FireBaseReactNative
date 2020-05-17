@@ -13,7 +13,7 @@ const LoadingScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text style>Loading the app!</Text>
+      <Text>Loading the app!</Text>
       <Image
         style={{ width: 300, height: 200 }}
         source={{
