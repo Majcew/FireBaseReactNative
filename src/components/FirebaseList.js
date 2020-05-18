@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { FlatList, View, Text, TouchableOpacity, Modal } from "react-native";
 import firebase from "firebase";
-import { ionicons } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 import { Checkmark } from "./Checkmark";
 import { Popup } from "../components/Popup";
 
@@ -31,6 +31,21 @@ export const FirebaseList = (props) => {
     setVisibility(state);
   };
 
+  const icon = (name) => {
+    switch (name) {
+      case "Book":
+        return "md-book";
+      case "Music":
+        return "md-musical-note";
+      case "Movie":
+        return "md-easel";
+      case "Serial":
+        return "md-play";
+      default:
+        return;
+    }
+  };
+
   return (
     <View>
       <FlatList
@@ -48,6 +63,7 @@ export const FirebaseList = (props) => {
                 deleteItem(item.key);
               }}
             >
+              <Ionicons name={icon(item.info.tag)} size={24} color="green" />
               <Text>
                 Author: {item.info.author} Tag: {item.info.tag}
               </Text>
