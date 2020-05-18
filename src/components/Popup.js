@@ -1,38 +1,61 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, TextInput, CheckBox } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import {
+  Modal,
+  View,
+  Text,
+  TextInput,
+  CheckBox,
+  StyleSheet,
+  TouchableOpacity,
+} from "react-native";
 import firebase from "firebase";
 
-const AddMovie = () => {
+export const Popup = (props) => {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
-  const [tag, setTag] = useState("Movie");
+  const [tag, setTag] = useState("Book");
   const [state, setState] = useState(false);
   const [uid, setUid] = useState("");
+  const [visibility, setVisibility] = useState(false);
 
   useEffect(() => {
+    setVisibility(props.visibility);
     setUid(firebase.auth().currentUser.uid);
-  });
+  }, [props.visibility]);
 
-  const addToFirebase = () => {
-    //funkcja dodająca obiekt do firebase (tylko dla danego użytkownika)
+  useEffect(() => {
+    if (props.edit) {
+      setAuthor(props.edit.info.author);
+      setState(props.edit.info.state);
+      setTag(props.edit.info.tag);
+      setTitle(props.edit.info.title);
+    }
+  }, [props.edit]);
+
+  const updateRecord = () => {
     firebase
       .database()
-      .ref("users/" + uid)
-      .push({
+      .ref("users/" + uid + "/" + props.edit.key)
+      .set({
         title: title,
         author: author,
         tag: tag,
         state: state,
       })
       .catch((error) => console.log(error));
+    setVisibility(false);
+    props.onChange(false);
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={[{ marginTop: 32 }, { textAlign: "center" }]}>
-        Here you will add Movies !
-      </Text>
+    <Modal
+      animationType="fade"
+      visible={visibility}
+      onRequestClose={() => {
+        setVisibility(false);
+        props.onChange(false);
+      }}
+    >
       <View style={[styles.form, { marginTop: 32 }]}>
         <View>
           <Text style={styles.inputTitle}>Title</Text>
@@ -66,18 +89,23 @@ const AddMovie = () => {
               setState(!state);
             }}
           />
-          <Text style={{ marginLeft: 32 }}>Have you seen the movie?</Text>
+          <Text style={{ marginLeft: 32 }}>
+            Do you want to change the state?
+          </Text>
         </View>
+        <TouchableOpacity
+          style={[styles.button, { marginTop: 32 }]}
+          onPress={updateRecord}
+        >
+          <Text style={{ color: "#FFF", fontWeight: "500" }}>
+            Submit Changes
+          </Text>
+        </TouchableOpacity>
       </View>
-      <TouchableOpacity style={styles.button} onPress={addToFirebase}>
-        <Text style={{ color: "#FFF", fontWeight: "500" }}>
-          Add to Firebase
-        </Text>
-      </TouchableOpacity>
-    </View>
+    </Modal>
   );
 };
-export default AddMovie;
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -107,3 +135,4 @@ const styles = StyleSheet.create({
     textTransform: "uppercase",
   },
 });
+export default Popup;
