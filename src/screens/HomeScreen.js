@@ -1,19 +1,17 @@
-import React, { useState, useEffect, useLayoutEffect } from "react";
-import { StyleSheet, Text, View, TextInput, FlatList } from "react-native";
+import React, { useState, useEffect } from "react";
+import { StyleSheet, Text, View, TextInput } from "react-native";
 import firebase from "firebase";
 import FirebaseList from "../components/FirebaseList";
 
-const HomeScreen = ({ navigation }) => {
-  const [email, setEmail] = useState("");
+const HomeScreen = () => {
   const [fullList, setFullList] = useState([]);
   const [fullName, setFullName] = useState("");
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState([]);
   const [uid, setUid] = useState("");
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    const { email, displayName, uid } = firebase.auth().currentUser;
-    setEmail(email);
+    const { displayName, uid } = firebase.auth().currentUser;
     setFullName(displayName);
     setUid(uid);
     fetchData(uid);
@@ -59,7 +57,7 @@ const HomeScreen = ({ navigation }) => {
   };
 
   return (
-    <View style={(styles.container, { marginTop: 52 })}>
+    <View style={(styles.container, { paddingTop: 32 })}>
       <Text style={[{ textAlign: "center" }]}>Welcome {fullName}</Text>
       <View style={[styles.form, { marginTop: 32 }]}>
         <View>
@@ -67,11 +65,13 @@ const HomeScreen = ({ navigation }) => {
           <TextInput
             style={styles.input}
             autoCapitalize="none"
-            onChangeText={(filter) => setSearch(filter)}
-            onSubmitEditing={fetchWithString}
+            onChangeText={(filter) => {
+              setSearch(filter);
+              fetchWithString();
+            }}
             value={search}
           ></TextInput>
-          <FirebaseList data={data} navigation={navigation} uid={uid} />
+          <FirebaseList data={data} uid={uid} />
         </View>
       </View>
     </View>
@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   form: {
-    marginBottom: 48,
+    marginBottom: 255,
     marginHorizontal: 30,
   },
   input: {

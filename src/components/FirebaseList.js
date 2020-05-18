@@ -1,20 +1,19 @@
 import React, { useState, useEffect } from "react";
-import { FlatList, View, Text, TouchableOpacity } from "react-native";
+import { FlatList, View, Text, TouchableOpacity, Modal } from "react-native";
 import firebase from "firebase";
+import { ionicons } from "@expo/vector-icons";
 import { Checkmark } from "./Checkmark";
+import { Popup } from "../components/Popup";
 
 export const FirebaseList = (props) => {
   const [data, setData] = useState([]);
-  const [navigation, setNavigation] = useState(null);
   const [uid, setUid] = useState(null);
+  const [edit, setEdit] = useState(null);
+  const [visibility, setVisibility] = useState(false);
 
   useEffect(() => {
     setData(props.data);
   }, [props.data]);
-
-  useEffect(() => {
-    setNavigation(props.navigation);
-  }, [props.navigation]);
 
   useEffect(() => {
     setUid(props.uid);
@@ -28,54 +27,41 @@ export const FirebaseList = (props) => {
       .remove();
   };
 
-  const editItem = (item) => {
-    switch (item.info.tag) {
-      case "Serial":
-        console.log("Serial");
-        navigation.navigate("Serial", { data: item });
-        break;
-      case "Music":
-        console.log("Music");
-        navigation.navigate("Music", { data: item });
-        break;
-      case "Movie":
-        console.log("Movie");
-        navigation.navigate("Movie", { data: item });
-        break;
-      case "Book":
-        console.log("Book");
-        navigation.navigate("Book", { data: item });
-        break;
-      default:
-        break;
-    }
+  const handleReturn = (state) => {
+    setVisibility(state);
   };
 
   return (
-    <FlatList
-      style={[{ marginTop: 32 }, { backgroundColor: "orange" }]}
-      data={data}
-      keyExtractor={(item, index) => index.toString()}
-      renderItem={({ item }) => (
-        <View>
-          <TouchableOpacity
-            onPress={() => editItem(item)}
-            onLongPress={() => {
-              deleteItem(item.key);
-            }}
-          >
-            <Text>
-              Author: {item.info.author} Tag: {item.info.tag}
-            </Text>
-            <Text>Title: {item.info.title}</Text>
-            <Text>
-              Seen/Watched/Listened:{"   "}
-              <Checkmark state={item.info.state} />
-            </Text>
-          </TouchableOpacity>
-        </View>
-      )}
-    />
+    <View>
+      <FlatList
+        style={[{ marginTop: 32 }, { backgroundColor: "orange" }]}
+        data={data}
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={({ item }) => (
+          <View>
+            <TouchableOpacity
+              onPress={() => {
+                setVisibility(true);
+                setEdit(item);
+              }}
+              onLongPress={() => {
+                deleteItem(item.key);
+              }}
+            >
+              <Text>
+                Author: {item.info.author} Tag: {item.info.tag}
+              </Text>
+              <Text>Title: {item.info.title}</Text>
+              <Text>
+                Seen/Watched/Listened:{"   "}
+                <Checkmark state={item.info.state} />
+              </Text>
+            </TouchableOpacity>
+          </View>
+        )}
+      />
+      <Popup edit={edit} visibility={visibility} onChange={handleReturn} />
+    </View>
   );
 };
 export default FirebaseList;

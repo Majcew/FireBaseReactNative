@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, TextInput } from "react-native";
+import { View, Text, StyleSheet, TextInput, CheckBox } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import firebase from "firebase";
 
@@ -52,6 +52,21 @@ const AddMusic = () => {
             onChangeText={(name) => setAuthor(name)}
             value={author}
           ></TextInput>
+        </View>
+        <View
+          style={[
+            { marginTop: 32 },
+            { alignItems: "center" },
+            { flexDirection: "row" },
+          ]}
+        >
+          <CheckBox
+            value={state}
+            onValueChange={() => {
+              setState(!state);
+            }}
+          />
+          <Text style={{ marginLeft: 32 }}>Have you heard the song?</Text>
         </View>
       </View>
       <TouchableOpacity style={styles.button} onPress={addToFirebase}>
