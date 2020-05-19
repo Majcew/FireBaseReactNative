@@ -17,10 +17,6 @@ const HomeScreen = () => {
     fetchData(uid);
   }, []);
 
-  useEffect(() => {
-    fetchWithString();
-  }, [search]);
-
   const fetchData = (uid) => {
     firebase
       .database()
@@ -39,7 +35,7 @@ const HomeScreen = () => {
       });
   };
 
-  const fetchWithString = () => {
+  const fetchWithString = (search) => {
     if (search === "") {
       setData(fullList);
     } else {
@@ -71,6 +67,7 @@ const HomeScreen = () => {
             autoCapitalize="none"
             onChangeText={(filter) => {
               setSearch(filter);
+              fetchWithString(filter);
             }}
             value={search}
           ></TextInput>
