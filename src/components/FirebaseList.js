@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { FlatList, View, Text, TouchableOpacity, Modal } from "react-native";
+import {
+  FlatList,
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+} from "react-native";
 import firebase from "firebase";
 import { Ionicons } from "@expo/vector-icons";
 import { Checkmark } from "./Checkmark";
@@ -49,7 +55,6 @@ export const FirebaseList = (props) => {
   return (
     <View>
       <FlatList
-        style={[{ marginTop: 32 }, { backgroundColor: "orange" }]}
         data={data}
         keyExtractor={(item, index) => index.toString()}
         renderItem={({ item }) => (
@@ -63,15 +68,27 @@ export const FirebaseList = (props) => {
                 deleteItem(item.key);
               }}
             >
-              <Ionicons name={icon(item.info.tag)} size={24} color="green" />
-              <Text>
-                Author: {item.info.author} Tag: {item.info.tag}
-              </Text>
-              <Text>Title: {item.info.title}</Text>
-              <Text>
-                Seen/Watched/Listened:{"   "}
-                <Checkmark state={item.info.state} />
-              </Text>
+              <View style={style.item}>
+                <Ionicons
+                  style={{ width: 50, height: 50, marginLeft: 12 }}
+                  name={icon(item.info.tag)}
+                  size={50}
+                  color="green"
+                />
+                <View
+                  style={{ flex: 1, justifyContent: "center", marginLeft: 10 }}
+                >
+                  <Text style={{ fontSize: 14, color: "green", marginTop: 2 }}>
+                    {item.info.title}
+                  </Text>
+                  <Text style={{ fontSize: 14, color: "red", marginTop: 2 }}>
+                    {item.info.author}
+                  </Text>
+                </View>
+                <View style={{ alignSelf: "center", marginRight: 10 }}>
+                  <Checkmark state={item.info.state} />
+                </View>
+              </View>
             </TouchableOpacity>
           </View>
         )}
@@ -80,4 +97,17 @@ export const FirebaseList = (props) => {
     </View>
   );
 };
+
+const style = StyleSheet.create({
+  item: {
+    flex: 1,
+    flexDirection: "row",
+    borderRadius: 8,
+    margin: 10,
+    elevation: 2,
+  },
+  text: {
+    flexDirection: "column",
+  },
+});
 export default FirebaseList;

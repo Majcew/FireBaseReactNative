@@ -6,7 +6,7 @@ import FirebaseList from "../components/FirebaseList";
 const HomeScreen = () => {
   const [fullList, setFullList] = useState([]);
   const [fullName, setFullName] = useState("");
-  const [search, setSearch] = useState([]);
+  const [search, setSearch] = useState("");
   const [uid, setUid] = useState("");
   const [data, setData] = useState([]);
 
@@ -35,7 +35,7 @@ const HomeScreen = () => {
       });
   };
 
-  const fetchWithString = () => {
+  const fetchWithString = (search) => {
     if (search === "") {
       setData(fullList);
     } else {
@@ -67,7 +67,7 @@ const HomeScreen = () => {
             autoCapitalize="none"
             onChangeText={(filter) => {
               setSearch(filter);
-              fetchWithString();
+              fetchWithString(filter);
             }}
             value={search}
           ></TextInput>

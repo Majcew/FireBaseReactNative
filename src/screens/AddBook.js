@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, TextInput, CheckBox } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TextInput,
+  CheckBox,
+  Alert,
+} from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import firebase from "firebase";
 
@@ -15,7 +22,16 @@ const AddBook = () => {
   });
 
   const addToFirebase = () => {
-    //funkcja dodająca obiekt do firebase (tylko dla danego użytkownika)
+    if (title === "")
+      return Alert.alert(
+        "No title",
+        "To add some records to the database it MUST contain a title",
+        [
+          {
+            text: "I understand",
+          },
+        ]
+      );
     firebase
       .database()
       .ref("users/" + uid)
